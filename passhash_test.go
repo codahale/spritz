@@ -59,16 +59,3 @@ func BenchmarkPasswordHash20(b *testing.B) {
 		spritz.InsecurePasswordHash(v, nil, 20, 32)
 	}
 }
-
-func BenchmarkStream(b *testing.B) {
-	v := []byte{'a', 'r', 'c', 'f', 'o', 'u', 'r'}
-	s := spritz.NewStream(v)
-	out := make([]byte, 1024)
-	b.SetBytes(int64(len(out)))
-	b.ReportAllocs()
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		s.XORKeyStream(out, out)
-	}
-}
