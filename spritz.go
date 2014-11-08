@@ -81,9 +81,9 @@ type state struct {
 
 func (s *state) initialize(n int) {
 	*s = state{
-		s: make([]int, 256),
+		s: make([]int, n),
 		w: 1,
-		n: 256,
+		n: n,
 	}
 	for i := range s.s {
 		s.s[i] = i
