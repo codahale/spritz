@@ -47,7 +47,7 @@ type digest struct {
 func (d digest) Sum(b []byte) []byte {
 	s := *d.s // make a local copy
 	s.absorbStop()
-	s.absorb([]int{d.size})
+	s.absorbValue(d.size)
 
 	out := make([]byte, d.size)
 	s.squeezeBytes(out)
