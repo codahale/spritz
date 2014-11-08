@@ -27,7 +27,7 @@ func InsecurePasswordHash(password, salt []byte, m, n uint) []byte {
 	s.absorbStop()
 
 	// absorb the length
-	s.absorbValue(int(n))
+	s.absorbByte(int(n))
 	s.absorbStop()
 
 	// squeeze out the digest

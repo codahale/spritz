@@ -91,14 +91,14 @@ func (s *state) absorbNibble(x int) {
 	s.a = (s.a + 1) % s.n
 }
 
-func (s *state) absorbValue(b int) {
+func (s *state) absorbByte(b int) {
 	s.absorbNibble(b % s.d) // LOW
 	s.absorbNibble(b / s.d) // HIGH
 }
 
 func (s *state) absorb(msg []byte) {
 	for _, v := range msg {
-		s.absorbValue(int(v))
+		s.absorbByte(int(v))
 	}
 }
 

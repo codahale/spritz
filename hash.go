@@ -27,7 +27,7 @@ type hasher struct {
 func (h hasher) Sum(b []byte) []byte {
 	s := *h.s // make a local copy
 	s.absorbStop()
-	s.absorbValue(h.size)
+	s.absorbByte(h.size)
 
 	out := make([]byte, h.size)
 	s.squeeze(out)
