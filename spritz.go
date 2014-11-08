@@ -94,13 +94,7 @@ func (s *state) absorbValue(b int) {
 	s.absorbNibble(b / d) // HIGH
 }
 
-func (s *state) absorb(msg []int) {
-	for _, v := range msg {
-		s.absorbValue(v)
-	}
-}
-
-func (s *state) absorbBytes(msg []byte) {
+func (s *state) absorb(msg []byte) {
 	for _, v := range msg {
 		s.absorbValue(int(v))
 	}
@@ -114,16 +108,7 @@ func (s *state) drip() int {
 	return s.output()
 }
 
-func (s *state) squeeze(out []int) {
-	if s.a > 0 {
-		s.shuffle()
-	}
-	for i := range out {
-		out[i] = s.drip()
-	}
-}
-
-func (s *state) squeezeBytes(out []byte) {
+func (s *state) squeeze(out []byte) {
 	if s.a > 0 {
 		s.shuffle()
 	}

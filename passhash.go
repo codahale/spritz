@@ -13,14 +13,14 @@ func InsecurePasswordHash(password, salt []byte, m, n uint) []byte {
 	s.initialize(1 << m)
 
 	// absorb the password
-	s.absorbBytes(password)
+	s.absorb(password)
 	if s.a > 0 {
 		s.shuffle()
 	}
 	s.absorbStop()
 
 	// absorb the salt
-	s.absorbBytes(salt)
+	s.absorb(salt)
 	if s.a > 0 {
 		s.shuffle()
 	}
@@ -32,6 +32,6 @@ func InsecurePasswordHash(password, salt []byte, m, n uint) []byte {
 
 	// squeeze out the digest
 	out := make([]byte, int(n))
-	s.squeezeBytes(out)
+	s.squeeze(out)
 	return out
 }

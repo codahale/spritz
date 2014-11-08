@@ -21,13 +21,13 @@ func (h hasher) Sum(b []byte) []byte {
 	s.absorbValue(h.size)
 
 	out := make([]byte, h.size)
-	s.squeezeBytes(out)
+	s.squeeze(out)
 
 	return append(b, out...)
 }
 
 func (h hasher) Write(p []byte) (int, error) {
-	h.s.absorbBytes(p)
+	h.s.absorb(p)
 	return len(p), nil
 }
 

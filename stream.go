@@ -14,13 +14,13 @@ func NewStreamWithIV(key, iv []byte) cipher.Stream {
 	s.initialize(256)
 
 	// key setup
-	s.absorbBytes(key)
+	s.absorb(key)
 	if s.a > 0 {
 		s.shuffle()
 	}
 	if iv != nil {
 		s.absorbStop()
-		s.absorbBytes(iv)
+		s.absorb(iv)
 	}
 	return stream{s: &s}
 }
