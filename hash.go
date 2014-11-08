@@ -5,9 +5,18 @@ import "hash"
 // NewHash returns a new instance of the Spritz hash with the given output size.
 func NewHash(size int) hash.Hash {
 	var s state
-	h := hasher{size: size, s: &s}
-	h.Reset()
-	return h
+	s.initialize(256)
+	return hasher{size: size, s: &s}
+}
+
+// NewMAC returns a new instance of the Spritz MAC with the given key and output
+// size.
+func NewMAC(key []byte, size int) hash.Hash {
+	var s state
+	s.initialize(256)
+	s.absorb(key)
+	s.absorbStop()
+	return hasher{size: size, s: &s}
 }
 
 type hasher struct {
