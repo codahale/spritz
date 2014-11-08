@@ -2,9 +2,11 @@
 // and hash.
 package spritz
 
+import "math"
+
 type state struct {
 	// these are all ints instead of bytes to allow for states > 256
-	n, d             int
+	n, d             int // state size and nibble size
 	s                []int
 	a, i, j, k, w, z int
 }
@@ -14,7 +16,7 @@ func (s *state) initialize(n int) {
 		s: make([]int, n),
 		w: 1,
 		n: n,
-		d: n / 16,
+		d: int(math.Ceil(math.Sqrt(float64(n)))),
 	}
 	for i := range s.s {
 		s.s[i] = i
