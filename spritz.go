@@ -4,7 +4,7 @@ package spritz
 
 type state struct {
 	// these are all ints instead of bytes to allow for states > 256
-	n                int
+	n, d             int
 	s                []int
 	a, i, j, k, w, z int
 }
@@ -14,6 +14,7 @@ func (s *state) initialize(n int) {
 		s: make([]int, n),
 		w: 1,
 		n: n,
+		d: n / 16,
 	}
 	for i := range s.s {
 		s.s[i] = i
@@ -89,9 +90,8 @@ func (s *state) absorbNibble(x int) {
 }
 
 func (s *state) absorbValue(b int) {
-	d := s.n / 16
-	s.absorbNibble(b % d) // LOW
-	s.absorbNibble(b / d) // HIGH
+	s.absorbNibble(b % s.d) // LOW
+	s.absorbNibble(b / s.d) // HIGH
 }
 
 func (s *state) absorb(msg []byte) {
