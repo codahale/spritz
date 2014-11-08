@@ -1,5 +1,8 @@
 // Package spritz provides a pure Go implementation of the Spritz stream cipher
 // and hash.
+//
+// More details on the Spritz family of algorithms can be found here:
+// http://people.csail.mit.edu/rivest/pubs/RS14.pdf.
 package spritz
 
 import "math"
