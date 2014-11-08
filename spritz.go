@@ -12,12 +12,11 @@ func NewStream(key []byte) cipher.Stream {
 	var s state
 	s.initialize(256)
 
-	// convert to ints
-	k := make([]int, len(key))
-	for i, v := range key {
-		k[i] = int(v)
+	// key setup
+	s.absorbBytes(key)
+	if s.a > 0 {
+		s.shuffle()
 	}
-	s.keySetup(k)
 
 	return stream{s: &s}
 }
@@ -50,23 +49,14 @@ func (d digest) Sum(b []byte) []byte {
 	s.absorbStop()
 	s.absorb([]int{d.size})
 
-	out := make([]int, d.size)
-	s.squeeze(out)
+	out := make([]byte, d.size)
+	s.squeezeBytes(out)
 
-	h := make([]byte, len(out))
-	for i, v := range out {
-		h[i] = byte(v)
-	}
-
-	return append(b, h...)
+	return append(b, out...)
 }
 
 func (d digest) Write(p []byte) (int, error) {
-	msg := make([]int, len(p))
-	for i, v := range p {
-		msg[i] = int(v)
-	}
-	d.s.absorb(msg)
+	d.s.absorbBytes(p)
 	return len(p), nil
 }
 
@@ -97,13 +87,6 @@ func (s *state) initialize(n int) {
 	}
 	for i := range s.s {
 		s.s[i] = i
-	}
-}
-
-func (s *state) keySetup(key []int) {
-	s.absorb(key)
-	if s.a > 0 {
-		s.shuffle()
 	}
 }
 
@@ -187,6 +170,12 @@ func (s *state) absorb(msg []int) {
 	}
 }
 
+func (s *state) absorbBytes(msg []byte) {
+	for _, v := range msg {
+		s.absorbValue(int(v))
+	}
+}
+
 func (s *state) drip() int {
 	if s.a > 0 {
 		s.shuffle()
@@ -201,5 +190,14 @@ func (s *state) squeeze(out []int) {
 	}
 	for i := range out {
 		out[i] = s.drip()
+	}
+}
+
+func (s *state) squeezeBytes(out []byte) {
+	if s.a > 0 {
+		s.shuffle()
+	}
+	for i := range out {
+		out[i] = byte(s.drip())
 	}
 }
